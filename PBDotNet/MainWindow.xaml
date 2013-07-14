@@ -1,0 +1,180 @@
+﻿<Window x:Class="PBDotNet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="603" Width="671">
+    <Grid>
+        
+        <Grid.Resources>
+            <DataTemplate x:Key="LibraryTemplate">
+                <Grid Margin="0,0,0,2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="32"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="16"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/PBDotNet;component/Images/Library.png"></Image>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding File}" Margin="2,0,0,0" FontWeight="Bold"></TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Dir}" Margin="2,0,0,0"></TextBlock>
+                </Grid>
+            </DataTemplate>
+
+            <HierarchicalDataTemplate x:Key="TargetTemplate" ItemsSource="{Binding Libraries}" ItemTemplate="{StaticResource LibraryTemplate}">
+                <Grid Margin="0,0,0,2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="32"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="16"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/PBDotNet;component/Images/Target.png"></Image>
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding File}" Margin="2,0,0,0" FontWeight="Bold"></TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Dir}" Margin="2,0,0,0"></TextBlock>
+                </Grid>
+            </HierarchicalDataTemplate>
+
+            <HierarchicalDataTemplate x:Key="DatawindowObjectTemplate" ItemsSource="{Binding Childs}">
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </HierarchicalDataTemplate>
+        </Grid.Resources>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="28"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Header="File">
+                <MenuItem Header="Open Workspace" x:Name="menuOpenWorkspace" Click="menuOpenWorkspace_Click"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+        
+
+
+        <TreeView Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6,6,6,6" x:Name="listWorkspace" ItemsSource="{Binding}" ItemTemplate="{StaticResource TargetTemplate}" SelectedItemChanged="listWorkspace_SelectedItemChanged" >
+        </TreeView>
+        <TabControl Grid.Column="1" Grid.Row="1"
+            HorizontalAlignment="Stretch" Margin="6,6,6,6" Name="tabControl1" VerticalAlignment="Stretch">
+            <TabItem Header="Items" Name="tabItem1">
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ListBox Grid.Row="0" Name="lsObjects" SelectionChanged="lsObjects_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock HorizontalAlignment="Stretch" Text="{Binding Name}"></TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TabControl Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,6,0,0" VerticalAlignment="Stretch">
+                        <TabItem Header="Source">
+                            <TextBox Name="txtSource"></TextBox>                  
+                        </TabItem>
+                        <TabItem Name="tabDatawindow" Header="Datawindow" Visibility="Collapsed">
+                            <Grid>
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="24"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                
+                                
+                                <TextBox Grid.Column="0" Grid.Row="0" Name="txtDwRelease"></TextBox>
+                                <TreeView Grid.Column="0" Grid.Row="1" x:Name="listDatawindowObjs" ItemsSource="{Binding}" ItemTemplate="{StaticResource DatawindowObjectTemplate}" SelectedItemChanged="listDatawindowObjs_SelectedItemChanged">
+                                </TreeView>
+                                
+                                <TextBox Grid.Column="1" Grid.Row="0" Name="txtDwValue"></TextBox>
+                                <DataGrid Grid.Column="1" Grid.Row="1" Name="dgProperties" AutoGenerateColumns="True">                                   
+                                </DataGrid>
+                            </Grid>
+                                                     
+                        </TabItem>
+                        <TabItem Name="tabUserobject" Header="Userobject">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <DataGrid Name="gridUoTypes" Grid.Row="0" Grid.Column="0" SelectionChanged="gridUoTypes_SelectionChanged" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Ancestor" Binding="{Binding Ancestor}" IsReadOnly="True"></DataGridTextColumn>
+                                        <DataGridCheckBoxColumn Header="Global"  Binding="{Binding Path=Global,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <DataGrid Name="gridUoProps" Grid.Row="1" Grid.Column="0"></DataGrid>
+                                <DataGrid Name="gridUoMethods" Grid.Row="2" Grid.Column="0" SelectionChanged="gridUoMethods_SelectionChanged" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Modifier" Binding="{Binding Modifier}" IsReadOnly="True"></DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <DataGrid Name="gridUoEvents" Grid.Row="3" Grid.Column="0" SelectionChanged="gridUoEvents_SelectionChanged" AutoGenerateColumns="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
+                                        <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
+                                        <DataGridCheckBoxColumn Header="Extended"  Binding="{Binding Path=Extended,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                                <TabControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
+                                    <TabItem Header="Source">
+                                        <TextBox Name="txtUoSource"></TextBox>
+                                    </TabItem>
+                                    <TabItem Header="Instance Variables">
+                                        <TextBox Name="txtUoIVariables"></TextBox>
+                                    </TabItem>
+                                    <TabItem Header="Shared Variables">
+                                        <TextBox Name="txtUoSVariables"></TextBox>
+                                    </TabItem>
+                                    <TabItem Header="Global Variables">
+                                        <TextBox Name="txtUoGVariables"></TextBox>
+                                    </TabItem>
+                                    <TabItem Header="External Functions">
+                                        <TextBox Name="txtUoExtFunctions"></TextBox>
+                                    </TabItem>
+                                </TabControl>
+                               
+                            </Grid>
+                            
+                        </TabItem>
+                    </TabControl>
+                    
+                </Grid>
+            </TabItem>
+            
+        </TabControl>
+        <StatusBar Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" x:Name="stWorkspace" />
+            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" x:Name="stVersion" />
+        </StatusBar>
+    </Grid>
+</Window>
