@@ -1,7 +1,7 @@
 PB-DotNet
 =========
 
-C# library to parse and analyze PowerScript source code
+C# library to parse and analyze PowerScript (Powerbuilder) source code
 
 Disclaimer
 =========
