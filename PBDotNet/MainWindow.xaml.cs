@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using PBDotNetLib.pbuilder;
 using PBDotNetLib.orca;
 using Powerscript=PBDotNetLib.pbuilder.powerscript;
+using System.Configuration;
 
 namespace PBDotNet
 {
@@ -25,11 +26,27 @@ namespace PBDotNet
     public partial class MainWindow : Window
     {
         private Workspace workspace;
-
+        private Orca.Version pbVersion;
 
         public MainWindow()
         {
             InitializeComponent();
+            string pbVersion = ConfigurationManager.AppSettings["PBVersion"];
+            if (String.IsNullOrEmpty(pbVersion)) {
+                this.pbVersion = Orca.Version.PB126;
+            } else {
+                switch (pbVersion) {
+                    case "115":
+                        this.pbVersion = Orca.Version.PB115;
+                        break;
+                    case "125":
+                        this.pbVersion = Orca.Version.PB125;
+                        break;
+                    case "126":
+                        this.pbVersion = Orca.Version.PB126;
+                        break;
+                }
+            }
         }
 
         private void menuOpenWorkspace_Click(object sender, RoutedEventArgs e)
@@ -39,7 +56,7 @@ namespace PBDotNet
             if (!dialog.ShowDialog().Value)
                 return;
 
-            workspace = new Workspace(dialog.FileName);
+            workspace = new Workspace(dialog.FileName, this.pbVersion);
 
             stWorkspace.Text = dialog.FileName;
             stVersion.Text = workspace.MajorVersion + "." + workspace.MinorVersion;
@@ -52,7 +69,7 @@ namespace PBDotNet
             if (e.NewValue is Library)
             {
                 Library lib = (Library)e.NewValue;
-                lsObjects.ItemsSource = new Orca().DirLibrary(lib.Dir + "\\" + lib.File);
+                lsObjects.ItemsSource = new Orca(this.pbVersion).DirLibrary(lib.Dir + "\\" + lib.File);
             }
         }
 
@@ -65,7 +82,7 @@ namespace PBDotNet
             lib = (PBDotNetLib.orca.LibEntry)lsObjects.SelectedItem;
             if (lib != null)
             {
-                new Orca().FillCode(lib);
+                new Orca(this.pbVersion).FillCode(lib);
 
                 txtSource.Text = lib.Source;
                 

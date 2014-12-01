@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Configuration;
 using PBDotNetLib.common;
 using PBDotNetLib.orca;
 
@@ -16,7 +17,7 @@ namespace PBDotNetLib.pbuilder
 
         private string dir;
         private string file;
-        private Orca orca = new Orca();
+        private Orca orca = null;
         
         #endregion
 
@@ -45,8 +46,10 @@ namespace PBDotNetLib.pbuilder
         /// constructor
         /// </summary>
         /// <param name="file">path to lib</param>
-        public Library(string file)
+        /// <param name="version">PB version</param>
+        public Library(string file, Orca.Version version)
         {
+            this.orca = new Orca(version);
             dir = file.Substring(0, file.LastIndexOf("\\"));
             this.file = file.Substring(file.LastIndexOf("\\") + 1);
         }

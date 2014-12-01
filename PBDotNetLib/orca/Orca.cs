@@ -13,10 +13,17 @@ namespace PBDotNetLib.orca
     /// </summary>
     public class Orca
     {
+        public enum Version {
+            PB115,
+            PB125,
+            PB126
+        }
+
+        private Version currentVersion;
+
         #region private
         private List<LibEntry> libEntries;
         private string currentLibrary = null;
-
         private static int session = 0;
         #endregion
 
@@ -39,25 +46,103 @@ namespace PBDotNetLib.orca
             PBORCA_BINARY
         }
 
-        #region extern and unsafe
+        #region PB12.5
 
         [DllImport("pborc125.dll", EntryPoint = "PBORCA_SessionOpen", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static unsafe extern int PBORCA_SessionOpen();
+        private static unsafe extern int PBORCA_SessionOpen125();
 
         [DllImport("pborc125.dll", EntryPoint = "PBORCA_SessionClose", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static unsafe extern void PBORCA_SessionClose(int hORCASession);
+        private static unsafe extern void PBORCA_SessionClose125(int hORCASession);
 
         [DllImport("pborc125.dll", EntryPoint = "PBORCA_LibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static unsafe extern int PBORCA_LibraryCreate(int hORCASession, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComment);
+        private static unsafe extern int PBORCA_LibraryCreate125(int hORCASession, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComment);
 
         [DllImport("pborc125.dll", CharSet = CharSet.Auto)]
-        private static extern int PBORCA_LibraryEntryExport(
+        private static extern int PBORCA_LibraryEntryExport125(
             int hORCASession,
             [MarshalAs(UnmanagedType.LPWStr)] string lpszLibraryName,
             [MarshalAs(UnmanagedType.LPWStr)] string lpszEntryName,
             PBORCA_ENTRY_TYPE otEntryType,
             [MarshalAs(UnmanagedType.LPWStr)] StringBuilder lpszExportBuffer,
             System.Int32 lExportBufferSize);
+
+        [DllImport("pborc125.dll", EntryPoint = "PBORCA_LibraryDirectory", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int PBORCA_LibraryDirectory125(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComments,
+            int iCmntsBufflen,
+            PBORCA_LIBDIRCALLBACK pListProc,
+            IntPtr pUserData
+        );
+
+        #endregion PB12.5
+
+        #region PB12.6
+
+        [DllImport("pborc126.dll", EntryPoint = "PBORCA_SessionOpen", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static unsafe extern int PBORCA_SessionOpen126();
+
+        [DllImport("pborc126.dll", EntryPoint = "PBORCA_SessionClose", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static unsafe extern void PBORCA_SessionClose126(int hORCASession);
+
+        [DllImport("pborc126.dll", EntryPoint = "PBORCA_LibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static unsafe extern int PBORCA_LibraryCreate126(int hORCASession, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComment);
+
+        [DllImport("pborc126.dll", CharSet = CharSet.Auto)]
+        private static extern int PBORCA_LibraryEntryExport126(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszLibraryName,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszEntryName,
+            PBORCA_ENTRY_TYPE otEntryType,
+            [MarshalAs(UnmanagedType.LPWStr)] StringBuilder lpszExportBuffer,
+            System.Int32 lExportBufferSize);
+
+        [DllImport("pborc126.dll", EntryPoint = "PBORCA_LibraryDirectory", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int PBORCA_LibraryDirectory126(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComments,
+            int iCmntsBufflen,
+            PBORCA_LIBDIRCALLBACK pListProc,
+            IntPtr pUserData
+        );
+
+        #endregion PB12.6
+
+        #region PB11.5
+
+        [DllImport("pborc115.dll", EntryPoint = "PBORCA_SessionOpen", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static unsafe extern int PBORCA_SessionOpen115();
+
+        [DllImport("pborc115.dll", EntryPoint = "PBORCA_SessionClose", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static unsafe extern void PBORCA_SessionClose115(int hORCASession);
+
+        [DllImport("pborc115.dll", EntryPoint = "PBORCA_LibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static unsafe extern int PBORCA_LibraryCreate115(int hORCASession, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComment);
+
+        [DllImport("pborc115.dll", EntryPoint = "PBORCA_LibraryEntryExport", CharSet = CharSet.Auto)]
+        private static extern int PBORCA_LibraryEntryExport115(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszLibraryName,
+            [MarshalAs(UnmanagedType.LPWStr)] string lpszEntryName,
+            PBORCA_ENTRY_TYPE otEntryType,
+            [MarshalAs(UnmanagedType.LPWStr)] StringBuilder lpszExportBuffer,
+            System.Int32 lExportBufferSize);
+
+        [DllImport("pborc115.dll", EntryPoint = "PBORCA_LibraryDirectory", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int PBORCA_LibraryDirectory115(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComments,
+            int iCmntsBufflen,
+            PBORCA_LIBDIRCALLBACK pListProc,
+            IntPtr pUserData
+        );
+
+        #endregion PB11.5
+
+        #region extern and unsafe
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         private struct PBORCA_DIRENTRY
@@ -72,16 +157,6 @@ namespace PBDotNetLib.orca
 
         private delegate void PBORCA_LIBDIRCALLBACK(IntPtr pDirEntry,IntPtr lpUserData);
 
-        [DllImport("pborc125.dll", EntryPoint = "PBORCA_LibraryDirectory", CharSet = CharSet.Unicode, SetLastError = true)]      
-        private static extern int PBORCA_LibraryDirectory(
-            int hORCASession,
-            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
-            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComments,
-            int iCmntsBufflen,
-            PBORCA_LIBDIRCALLBACK pListProc,
-            IntPtr pUserData
-        );
-
         private void PBORCA_LibDirCallback(IntPtr pDirEntry, IntPtr lpUserData)
         {
             PBORCA_DIRENTRY myDirEntry = (PBORCA_DIRENTRY)Marshal.PtrToStructure(pDirEntry,typeof(PBORCA_DIRENTRY));
@@ -91,9 +166,14 @@ namespace PBDotNetLib.orca
         }
         #endregion
 
-
-        public Orca()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="version">PB Version to use</param>
+        public Orca(Version version)
         {
+            this.currentVersion = version;
+
             if (session == 0)
                 SessionOpen();
         }
@@ -209,17 +289,50 @@ namespace PBDotNetLib.orca
         /// <param name="comment">comment for thew lib</param>
         public void CreateLibrary(string file, string comment = "")
         {
-            int orcaSession;
+            int orcaSession = 0;
 
-            if (session == 0)
-                orcaSession = PBORCA_SessionOpen();
+            if (session == 0){
+                switch(this.currentVersion){
+                    case Version.PB115:
+                        orcaSession = PBORCA_SessionOpen115();
+                        break;
+                    case Version.PB125:
+                        orcaSession = PBORCA_SessionOpen125();
+                        break;
+                    case Version.PB126:
+                        orcaSession = PBORCA_SessionOpen126();
+                        break;
+                }
+            }                
             else
                 orcaSession = session;
-            
-            PBORCA_LibraryCreate(orcaSession, file, comment);
-            
-            if(session == 0 )
-                PBORCA_SessionClose(orcaSession);
+
+            switch (this.currentVersion) {
+                case Version.PB115:
+                    PBORCA_LibraryCreate115(orcaSession, file, comment);
+                    break;
+                case Version.PB125:
+                    PBORCA_LibraryCreate125(orcaSession, file, comment);
+                    break;
+                case Version.PB126:
+                    PBORCA_LibraryCreate126(orcaSession, file, comment);
+                    break;
+            }
+
+
+            if (session == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        PBORCA_SessionClose115(orcaSession);
+                        break;
+                    case Version.PB125:
+                        PBORCA_SessionClose125(orcaSession);
+                        break;
+                    case Version.PB126:
+                        PBORCA_SessionClose126(orcaSession);
+                        break;
+                }                
+            }
         }
 
         /// <summary>
@@ -229,22 +342,53 @@ namespace PBDotNetLib.orca
         /// <returns>list of entries</returns>
         public List<LibEntry> DirLibrary(string file)
         {
-            int orcaSession;
+            int orcaSession = 0;
             PBORCA_LIBDIRCALLBACK PBORCA_LibraryDirectoryCallback = new PBORCA_LIBDIRCALLBACK(PBORCA_LibDirCallback);
             IntPtr dummy = new IntPtr();
 
             currentLibrary = file;
             libEntries = new List<LibEntry>();
 
-            if (session == 0)
-                orcaSession = PBORCA_SessionOpen();
-            else
+            if (session == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        orcaSession = PBORCA_SessionOpen115();
+                        break;
+                    case Version.PB125:
+                        orcaSession = PBORCA_SessionOpen125();
+                        break;
+                    case Version.PB126:
+                        orcaSession = PBORCA_SessionOpen126();
+                        break;
+                }
+            } else
                 orcaSession = session;
 
-            PBORCA_LibraryDirectory(orcaSession, file, "", 0, PBORCA_LibraryDirectoryCallback, dummy);
-            
-            if(session == 0)
-                PBORCA_SessionClose(orcaSession);
+            switch (this.currentVersion) { 
+                case Version.PB115:
+                    PBORCA_LibraryDirectory115(orcaSession, file, "", 0, PBORCA_LibraryDirectoryCallback, dummy);
+                    break;
+                case Version.PB125:
+                    PBORCA_LibraryDirectory125(orcaSession, file, "", 0, PBORCA_LibraryDirectoryCallback, dummy);
+                    break;
+                case Version.PB126:
+                    PBORCA_LibraryDirectory126(orcaSession, file, "", 0, PBORCA_LibraryDirectoryCallback, dummy);
+                    break;
+            }
+
+            if (session == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        PBORCA_SessionClose115(orcaSession);
+                        break;
+                    case Version.PB125:
+                        PBORCA_SessionClose125(orcaSession);
+                        break;
+                    case Version.PB126:
+                        PBORCA_SessionClose126(orcaSession);
+                        break;
+                }
+            }
 
             return libEntries;
         }
@@ -255,30 +399,84 @@ namespace PBDotNetLib.orca
         /// <param name="libEntry">library entry to export</param>
         public void FillCode(LibEntry libEntry)
         {
-            int orcaSession;
+            int orcaSession = 0;
             StringBuilder sbSource = new StringBuilder(5242880); // 5 MB
 
-            if (session == 0)
-                orcaSession = PBORCA_SessionOpen();
-            else
+            if (session == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        orcaSession = PBORCA_SessionOpen115();
+                        break;
+                    case Version.PB125:
+                        orcaSession = PBORCA_SessionOpen125();
+                        break;
+                    case Version.PB126:
+                        orcaSession = PBORCA_SessionOpen126();
+                        break;
+                }
+            } else
                 orcaSession = session;
 
-            PBORCA_LibraryEntryExport(orcaSession, libEntry.Library, libEntry.Name, GetEntryType(libEntry.Type), sbSource, sbSource.Capacity);
+            switch (this.currentVersion) {
+                case Version.PB115:
+                    PBORCA_LibraryEntryExport115(orcaSession, libEntry.Library, libEntry.Name, GetEntryType(libEntry.Type), sbSource, sbSource.Capacity);
+                    break;
+                case Version.PB125:
+                    PBORCA_LibraryEntryExport125(orcaSession, libEntry.Library, libEntry.Name, GetEntryType(libEntry.Type), sbSource, sbSource.Capacity);
+                    break;
+                case Version.PB126:
+                    PBORCA_LibraryEntryExport126(orcaSession, libEntry.Library, libEntry.Name, GetEntryType(libEntry.Type), sbSource, sbSource.Capacity);
+                    break;
+            }
+            
 
             libEntry.Source = sbSource.ToString();
 
-            if (session == 0)
-                PBORCA_SessionClose(orcaSession);
+            if (session == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        PBORCA_SessionClose115(orcaSession);
+                        break;
+                    case Version.PB125:
+                        PBORCA_SessionClose125(orcaSession);
+                        break;
+                    case Version.PB126:
+                        PBORCA_SessionClose126(orcaSession);
+                        break;
+                }
+            }
         }
 
         public void SessionOpen()
         {
-            session = PBORCA_SessionOpen();
+            switch (this.currentVersion) {
+                case Version.PB115:
+                    session = PBORCA_SessionOpen115();
+                    break;
+                case Version.PB125:
+                    session = PBORCA_SessionOpen125();
+                    break;
+                case Version.PB126:
+                    session = PBORCA_SessionOpen126();
+                    break;
+            }
+            
         }
 
         public void SessionClose()
         {
-            PBORCA_SessionClose(session);
+            switch (this.currentVersion) {
+                case Version.PB115:
+                    PBORCA_SessionClose115(session);
+                    break;
+                case Version.PB125:
+                    PBORCA_SessionClose125(session);
+                    break;
+                case Version.PB126:
+                    PBORCA_SessionClose126(session);
+                    break;
+            }
+            
         }
 
         /*

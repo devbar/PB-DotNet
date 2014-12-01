@@ -20,6 +20,7 @@ namespace PBDotNetLib.common
         private string dir;
         private string file;
         private bool exists;
+        protected orca.Orca.Version version;
 
         #endregion
 
@@ -70,10 +71,12 @@ namespace PBDotNetLib.common
         /// constructor
         /// </summary>
         /// <param name="file">the file to read</param>
-        public PBProjFile(string file)
+        public PBProjFile(string file, orca.Orca.Version version)
         {
             string source;
             StreamReader reader = null;
+
+            this.version = version;
             
             this.dir = file.Substring(0, file.LastIndexOf("\\"));
             this.file = file.Substring(file.LastIndexOf("\\") + 1);

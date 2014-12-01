@@ -30,7 +30,7 @@ namespace PBDotNetLib.pbuilder
                 List<Target> targList = new List<Target>();
 
                 foreach(Tuple<int,string,bool,bool> targ in targets){
-                    targList.Add(new Target(targ.Item1, targ.Item2, targ.Item3, targ.Item4));
+                    targList.Add(new Target(targ.Item1, targ.Item2, targ.Item3, targ.Item4, this.version));
                 }
 
                 return targList.ToArray();
@@ -43,7 +43,8 @@ namespace PBDotNetLib.pbuilder
         /// constructor
         /// </summary>
         /// <param name="file">path to workspace</param>
-        public Workspace(string file) : base (file)
+        /// <param name="version">PB Version</param>
+        public Workspace(string file, orca.Orca.Version version) : base (file, version)
         {
             
         }

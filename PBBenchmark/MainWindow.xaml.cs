@@ -16,6 +16,7 @@ using PBDotNetLib.pbuilder;
 using PBDotNetLib.orca;
 using System.Threading;
 using Powerscript = PBDotNetLib.pbuilder.powerscript;
+using System.Configuration;
 
 namespace PBBenchmark
 {
@@ -27,10 +28,27 @@ namespace PBBenchmark
         private List<LibEntry> entries;
         private Workspace workspace;
         private object lockObj = new object();
+        private Orca.Version pbVersion;
 
         public MainWindow()
         {
             InitializeComponent();
+            string pbVersion = ConfigurationManager.AppSettings["PBVersion"];
+            if (String.IsNullOrEmpty(pbVersion)) {
+                this.pbVersion = Orca.Version.PB126;
+            } else {
+                switch (pbVersion) {
+                    case "115":
+                        this.pbVersion = Orca.Version.PB115;
+                        break;
+                    case "125":
+                        this.pbVersion = Orca.Version.PB125;
+                        break;
+                    case "126":
+                        this.pbVersion = Orca.Version.PB126;
+                        break;
+                }
+            }
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -42,7 +60,7 @@ namespace PBBenchmark
             if (!dialog.ShowDialog().Value)
                 return;
 
-            workspace = new Workspace(dialog.FileName);
+            workspace = new Workspace(dialog.FileName, this.pbVersion);
 
             if (workspace.Targets.Length > 0)
             {
@@ -72,7 +90,7 @@ namespace PBBenchmark
             if (!dialog.ShowDialog().Value)
                 return;
 
-            workspace = new Workspace(dialog.FileName);
+            workspace = new Workspace(dialog.FileName, this.pbVersion);
 
             if (workspace.Targets.Length > 0)
             {
@@ -90,7 +108,7 @@ namespace PBBenchmark
 
         private void ReadCode()
         {
-            Orca orca = new Orca();
+            Orca orca = new Orca(this.pbVersion);
 
             foreach(LibEntry entry in entries)
             {

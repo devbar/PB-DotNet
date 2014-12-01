@@ -33,7 +33,7 @@ namespace PBDotNetLib.pbuilder
 
                 foreach (string lib in libs)
                 {
-                    libList.Add(new Library(lib));
+                    libList.Add(new Library(lib, this.version));
                 }
 
                 return libList.ToArray();
@@ -49,8 +49,9 @@ namespace PBDotNetLib.pbuilder
         /// <param name="file">target file path</param>
         /// <param name="defaultTarget">fag if it is default target</param>
         /// <param name="defaultRemoteTarget">flag if it is default remote target</param>
-        public Target(int order, string file, bool defaultTarget, bool defaultRemoteTarget)
-            : base(file)
+        /// <param name="version">PB version</param>
+        public Target(int order, string file, bool defaultTarget, bool defaultRemoteTarget, orca.Orca.Version version)
+            : base(file, version)
         {
             this.order = order;
             this.defaultTarget = defaultTarget;
