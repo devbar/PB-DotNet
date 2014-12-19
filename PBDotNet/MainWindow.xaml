@@ -47,7 +47,7 @@
         </Grid.Resources>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"></ColumnDefinition>
+            <ColumnDefinition Width="300" x:Name="gridWorkspace"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
@@ -60,10 +60,9 @@
         <Menu Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="File">
                 <MenuItem Header="Open Workspace" x:Name="menuOpenWorkspace" Click="menuOpenWorkspace_Click"></MenuItem>
+                <MenuItem Header="Open Library" x:Name="menuOpenLibrary" Click="menuOpenLibrary_Click"></MenuItem>
             </MenuItem>
-        </Menu>
-
-        
+        </Menu>       
 
 
         <TreeView Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6,6,6,6" x:Name="listWorkspace" ItemsSource="{Binding}" ItemTemplate="{StaticResource TargetTemplate}" SelectedItemChanged="listWorkspace_SelectedItemChanged" >

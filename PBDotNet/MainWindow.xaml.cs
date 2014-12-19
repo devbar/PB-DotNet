@@ -17,6 +17,7 @@ using PBDotNetLib.pbuilder;
 using PBDotNetLib.orca;
 using Powerscript=PBDotNetLib.pbuilder.powerscript;
 using System.Configuration;
+using PBDotNet.Util;
 
 namespace PBDotNet
 {
@@ -47,21 +48,55 @@ namespace PBDotNet
                         break;
                 }
             }
-        }
 
-        private void menuOpenWorkspace_Click(object sender, RoutedEventArgs e)
-        {
+            if (CmdlineArgs.Workspace != null) {
+                this.openWorkspace(CmdlineArgs.Workspace);
+            } else if (CmdlineArgs.Library != null) {
+                this.openLibrary(CmdlineArgs.Library);
+            }
+        }
+        
+        private void menuOpenWorkspace_Click(object sender, RoutedEventArgs e){
             OpenFileDialog dialog = new OpenFileDialog();
+
+            dialog.Filter = "Powerbuilder Workspace (*.pbw)|*.pbw";
 
             if (!dialog.ShowDialog().Value)
                 return;
 
-            workspace = new Workspace(dialog.FileName, this.pbVersion);
+            this.openWorkspace(dialog.FileName);
+        }
 
-            stWorkspace.Text = dialog.FileName;
+
+        private void menuOpenLibrary_Click(object sender, RoutedEventArgs e) {
+            OpenFileDialog dialog = new OpenFileDialog();
+
+            dialog.Filter = "Powerbuilder Librar (*.pbl)|*.pbl";
+
+            if (!dialog.ShowDialog().Value)
+                return;
+
+            this.openLibrary(dialog.FileName);
+        }
+
+        private void openLibrary(string libraryPath) {
+            Library lib = new Library(libraryPath, this.pbVersion);
+            lsObjects.ItemsSource = new Orca(this.pbVersion).DirLibrary(lib.Dir + "\\" + lib.File);
+
+            listWorkspace.DataContext = null;
+            listWorkspace.Visibility = System.Windows.Visibility.Collapsed;
+            gridWorkspace.Width = new GridLength(0);
+        }
+
+        private void openWorkspace(string workspacePath) {
+            workspace = new Workspace(workspacePath, this.pbVersion);
+
+            stWorkspace.Text = workspacePath;
             stVersion.Text = workspace.MajorVersion + "." + workspace.MinorVersion;
 
             listWorkspace.DataContext = workspace.Targets;
+            listWorkspace.Visibility = System.Windows.Visibility.Visible;
+            gridWorkspace.Width = new GridLength(300);
         }
 
         private void listWorkspace_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -151,9 +186,6 @@ namespace PBDotNet
 
             gridUoProps.ItemsSource = type.Properties;
             gridUoEvents.ItemsSource = type.Events;
-
-            
-
         }
 
         private void gridUoEvents_SelectionChanged(object sender, SelectionChangedEventArgs e)

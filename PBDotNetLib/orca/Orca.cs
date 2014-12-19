@@ -89,7 +89,7 @@ namespace PBDotNetLib.orca
         [DllImport("pborc126.dll", EntryPoint = "PBORCA_LibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
         private static unsafe extern int PBORCA_LibraryCreate126(int hORCASession, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName, [MarshalAs(UnmanagedType.LPTStr)] string lpszLibComment);
 
-        [DllImport("pborc126.dll", CharSet = CharSet.Auto)]
+        [DllImport("pborc126.dll", CharSet = CharSet.Auto, EntryPoint = "PBORCA_LibraryEntryExport")]
         private static extern int PBORCA_LibraryEntryExport126(
             int hORCASession,
             [MarshalAs(UnmanagedType.LPWStr)] string lpszLibraryName,
