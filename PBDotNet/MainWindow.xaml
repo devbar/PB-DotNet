@@ -84,7 +84,12 @@
                     </ListBox>
                     <TabControl Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,6,0,0" VerticalAlignment="Stretch">
                         <TabItem Header="Source">
-                            <TextBox Name="txtSource"></TextBox>                  
+                            <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtSource"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="PB"
+                                        FontSize="10pt"/>
                         </TabItem>
                         <TabItem Name="tabDatawindow" Header="Datawindow" Visibility="Collapsed">
                             <Grid>
@@ -146,19 +151,44 @@
                                 </DataGrid>
                                 <TabControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
                                     <TabItem Header="Source">
-                                        <TextBox Name="txtUoSource"></TextBox>
+                                        <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtUoSource"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="C#"
+                                        FontSize="10pt"/> 
                                     </TabItem>
                                     <TabItem Header="Instance Variables">
-                                        <TextBox Name="txtUoIVariables"></TextBox>
+                                        <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtUoIVariables"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="PB"
+                                        FontSize="10pt"/>
                                     </TabItem>
                                     <TabItem Header="Shared Variables">
-                                        <TextBox Name="txtUoSVariables"></TextBox>
+                                        <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtUoSVariables"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="PB"
+                                        FontSize="10pt"/>
                                     </TabItem>
                                     <TabItem Header="Global Variables">
-                                        <TextBox Name="txtUoGVariables"></TextBox>
+                                        <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtUoGVariables"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="PB"
+                                        FontSize="10pt"/>
                                     </TabItem>
                                     <TabItem Header="External Functions">
-                                        <TextBox Name="txtUoExtFunctions"></TextBox>
+                                        <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtUoExtFunctions"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="PB"
+                                        FontSize="10pt"/>
                                     </TabItem>
                                 </TabControl>
                                

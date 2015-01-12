@@ -18,6 +18,10 @@ using PBDotNetLib.orca;
 using Powerscript=PBDotNetLib.pbuilder.powerscript;
 using System.Configuration;
 using PBDotNet.Util;
+using System.IO;
+using System.Xml;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace PBDotNet
 {
@@ -28,6 +32,7 @@ namespace PBDotNet
     {
         private Workspace workspace;
         private Orca.Version pbVersion;
+        private IHighlightingDefinition highlightingDefinition = null;
 
         public MainWindow()
         {
@@ -54,6 +59,19 @@ namespace PBDotNet
             } else if (CmdlineArgs.Library != null) {
                 this.openLibrary(CmdlineArgs.Library);
             }
+
+            using (Stream s = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("PBDotNet.PBSyntax.xshd")) {
+                using (XmlTextReader reader = new XmlTextReader(s)) {
+                    highlightingDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
+
+            txtSource.SyntaxHighlighting = this.highlightingDefinition;
+            txtUoSource.SyntaxHighlighting = this.highlightingDefinition;
+            txtUoIVariables.SyntaxHighlighting = this.highlightingDefinition;
+            txtUoSVariables.SyntaxHighlighting = this.highlightingDefinition;
+            txtUoGVariables.SyntaxHighlighting = this.highlightingDefinition;
+            txtUoExtFunctions.SyntaxHighlighting = this.highlightingDefinition;
         }
         
         private void menuOpenWorkspace_Click(object sender, RoutedEventArgs e){
@@ -117,9 +135,9 @@ namespace PBDotNet
             lib = (PBDotNetLib.orca.LibEntry)lsObjects.SelectedItem;
             if (lib != null)
             {
-                new Orca(this.pbVersion).FillCode(lib);
+                new Orca(this.pbVersion).FillCode(lib);                
 
-                txtSource.Text = lib.Source;
+                txtSource.TextArea.Document.Text = lib.Source ?? "";
                 
                 switch (lib.Type)
                 {
@@ -165,10 +183,10 @@ namespace PBDotNet
 
                         if (types.Length > 0)
                         {
-                            txtUoIVariables.Text = types[0].InstanceVariables;
-                            txtUoSVariables.Text = types[0].SharedVariables;
-                            txtUoGVariables.Text = types[0].GlobalVariables;
-                            txtUoExtFunctions.Text = types[0].ExternalFunctions;
+                            txtUoIVariables.TextArea.Document.Text = types[0].InstanceVariables ?? "" ;
+                            txtUoSVariables.TextArea.Document.Text = types[0].SharedVariables ?? "";
+                            txtUoGVariables.TextArea.Document.Text = types[0].GlobalVariables ?? "";
+                            txtUoExtFunctions.TextArea.Document.Text = types[0].ExternalFunctions ?? "";
                             gridUoMethods.ItemsSource = types[0].Methods;
                         }
                         break;
@@ -193,7 +211,7 @@ namespace PBDotNet
             if (gridUoEvents.SelectedIndex < 0)
                 return;
 
-            txtUoSource.Text = ((Powerscript.Event[])gridUoEvents.ItemsSource)[gridUoEvents.SelectedIndex].Source;
+            txtUoSource.TextArea.Document.Text = ((Powerscript.Event[])gridUoEvents.ItemsSource)[gridUoEvents.SelectedIndex].Source;
         }
 
         private void gridUoTypes_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -206,7 +224,7 @@ namespace PBDotNet
             if (gridUoMethods.SelectedIndex < 0)
                 return;
 
-            txtUoSource.Text = ((Powerscript.Method[])gridUoMethods.ItemsSource)[gridUoMethods.SelectedIndex].Source;
+            txtUoSource.TextArea.Document.Text = ((Powerscript.Method[])gridUoMethods.ItemsSource)[gridUoMethods.SelectedIndex].Source;
         }
 
         private void listWorkspace_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
