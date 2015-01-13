@@ -1,0 +1,66 @@
+﻿<SyntaxDefinition name="PB" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+    <Color name="Comment" foreground="Green" />
+    <Color name="String" foreground="Blue" />
+    
+    <!-- This is the main ruleset. -->
+    <RuleSet ignoreCase="true">
+        <Span color="Comment" begin="//" />
+        <Span color="Comment" multiline="true" 
+           begin="/\*" end="\*/" />
+        
+        <Span color="String">
+            <Begin>"</Begin>
+            <End>"</End>
+            <RuleSet>
+                <!-- nested span for escape sequences -->
+                <Span begin="\\" end="." />
+            </RuleSet>
+        </Span>
+        
+        <Keywords fontWeight="bold" foreground="Blue">
+            <Word>forward</Word>
+            <Word>global</Word>
+            <Word>type</Word>
+            <Word>from</Word>
+            <Word>end</Word>
+            <Word>type</Word>          
+            <Word>integer</Word>
+            <Word>boolean</Word>
+            <Word>string</Word>
+            <Word>long</Word>
+            <Word>char</Word>
+            <Word>longlong</Word>
+            <Word>byte</Word>
+            <Word>blob</Word>
+            <Word>prototypes</Word>
+            <Word>private</Word>
+            <Word>public</Word>
+            <Word>protected</Word>
+            <Word>function</Word>
+            <Word>subroutine</Word>
+            <Word>event</Word>
+            <Word>if</Word>
+            <Word>then</Word>
+            <Word>for</Word>
+            <Word>next</Word>
+            <Word>to</Word>
+            <Word>return</Word>
+            <Word>on</Word>
+            <Word>choose</Word>
+            <Word>case</Word>
+            <Word>not</Word>
+            <Word>else</Word>
+            <Word>end</Word>
+        </Keywords>
+        
+        <!-- Digits -->
+        <Rule foreground="DarkBlue">
+            \b0[xX][0-9a-fA-F]+  # hex number
+        |    \b
+            (    \d+(\.[0-9]+)?   #number with optional floating point
+            |    \.[0-9]+         #or just starting with floating point
+            )
+            ([eE][+-]?[0-9]+)? # optional exponent
+        </Rule>
+    </RuleSet>
+</SyntaxDefinition>
