@@ -25,7 +25,7 @@ namespace PBBenchmark
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<LibEntry> entries;
+        private List<ILibEntry> entries;
         private Workspace workspace;
         private object lockObj = new object();
         private Orca.Version pbVersion;
@@ -120,12 +120,12 @@ namespace PBBenchmark
         {
             StringBuilder sb = new StringBuilder();
 
-            entries = new List<LibEntry>();
+            entries = new List<ILibEntry>();
 
-            Library[] test1 = target.Libraries;
+            ILibrary[] test1 = target.Libraries;
             foreach (Library lib in test1)
             {
-                LibEntry[] test = lib.EntryList;
+                ILibEntry[] test = lib.EntryList;
                 foreach (LibEntry entry in test)
                 {
                     sb.Append(entry.Name + "\r\n");
@@ -144,16 +144,16 @@ namespace PBBenchmark
             {
                 switch (entry.Type)
                 {
-                    case LibEntry.Objecttype.Datawindow:
+                    case Objecttype.Datawindow:
                         Powerscript.Datawindow.GetDatawindowFromSource(entry.Source);
                         
                         break;
-                    case LibEntry.Objecttype.Structure:
-                    case LibEntry.Objecttype.Menu:
-                    case LibEntry.Objecttype.Function:
-                    case LibEntry.Objecttype.Application:
-                    case LibEntry.Objecttype.Userobject:
-                    case LibEntry.Objecttype.Window:
+                    case Objecttype.Structure:
+                    case Objecttype.Menu:
+                    case Objecttype.Function:
+                    case Objecttype.Application:
+                    case Objecttype.Userobject:
+                    case Objecttype.Window:
                         Powerscript.Type.GetTypesFromSource(entry.Source);
                         break;
 
@@ -167,9 +167,9 @@ namespace PBBenchmark
 
             for (int i = v.Item2; i < v.Item1.Libraries.Length; i = i + v.Item3)
             {
-                Library lib = v.Item1.Libraries[i];
+                ILibrary lib = v.Item1.Libraries[i];
 
-                LibEntry[] test = lib.EntryList;
+                ILibEntry[] test = lib.EntryList;
                 foreach (LibEntry entry in test)
                 {
                     //addText(entry.Name);

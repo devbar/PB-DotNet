@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -107,6 +108,14 @@
     <Resource Include="VsMuster.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\CodePlex\WpfToolkit\Main\Source\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.AvalonDock\Xceed.Wpf.AvalonDock.csproj">
+      <Project>{db81988f-e0f2-45a0-a1fd-8c37f3d35244}</Project>
+      <Name>Xceed.Wpf.AvalonDock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\CodePlex\WpfToolkit\Main\Source\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.Toolkit\Xceed.Wpf.Toolkit.csproj">
+      <Project>{72e591d6-8f83-4d8c-8f67-9c325e623234}</Project>
+      <Name>Xceed.Wpf.Toolkit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PBDotNetLib\PBDotNetLib.csproj">
       <Project>{5209AFDD-9359-4A54-9E03-AA6C5807E3C2}</Project>
       <Name>PBDotNetLib</Name>

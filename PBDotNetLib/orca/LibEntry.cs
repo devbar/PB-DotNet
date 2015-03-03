@@ -8,28 +8,8 @@ namespace PBDotNetLib.orca
     /// <summary>
     /// entry in orca/pb library
     /// </summary>
-    public class LibEntry
+    public class LibEntry : ILibEntry
     {
-
-        /// <summary>
-        /// types of the objects in library
-        /// </summary>
-        public enum Objecttype
-        {
-            Application,
-            Datawindow,
-            Function,
-            Menu,
-            Query,
-            Structure,
-            Userobject,
-            Window,
-            Pipeline,
-            Project,
-            Proxyobject,
-            Binary,
-            None
-        }
 
         #region private
 
@@ -40,6 +20,7 @@ namespace PBDotNetLib.orca
         private Objecttype type;
         private string library;
         private string source;
+        private Orca.Version pbVersion;
 
         #endregion
 
@@ -96,6 +77,10 @@ namespace PBDotNetLib.orca
         {
             get
             {
+                if (String.IsNullOrEmpty(this.source)) {
+                    new Orca(this.pbVersion).FillCode(this);
+                }
+
                 return source;
             }
             set
@@ -114,7 +99,7 @@ namespace PBDotNetLib.orca
         /// <param name="size">size of object</param>
         /// <param name="library">path to library</param>
         /// <param name="comment">comment of entry</param>
-        public LibEntry(string name, Objecttype type, DateTime createTime, int size, string library, string comment = "")
+        public LibEntry(string name, Objecttype type, DateTime createTime, int size, string library, orca.Orca.Version pbVersion, string comment = "")
         {
             this.name = name;
             this.type = type;
@@ -122,6 +107,7 @@ namespace PBDotNetLib.orca
             this.size = size;
             this.comment = comment;
             this.library = library;
+            this.pbVersion = pbVersion;
         }
     }
 }

@@ -1,55 +1,55 @@
 ﻿<Window x:Class="PBDotNet.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
         Title="MainWindow" Height="603" Width="671">
+    <Window.Resources>
+        
+        <DataTemplate x:Key="LibraryTemplate">
+            <Grid Margin="0,0,0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="32"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="16"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/PBDotNet;component/Images/Library.png"></Image>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding File}" Margin="2,0,0,0" FontWeight="Bold"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Dir}" Margin="2,0,0,0"></TextBlock>
+            </Grid>
+        </DataTemplate>
+
+        <HierarchicalDataTemplate x:Key="TargetTemplate" ItemsSource="{Binding Libraries}" ItemTemplate="{StaticResource LibraryTemplate}">
+            <Grid Margin="0,0,0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="32"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="16"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/PBDotNet;component/Images/Target.png"></Image>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding File}" Margin="2,0,0,0" FontWeight="Bold"></TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Dir}" Margin="2,0,0,0"></TextBlock>
+            </Grid>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate x:Key="DatawindowObjectTemplate" ItemsSource="{Binding Childs}">
+            <TextBlock Text="{Binding Name}"></TextBlock>
+        </HierarchicalDataTemplate>
+        
+    </Window.Resources>
+    
     <Grid>
-        
-        <Grid.Resources>
-            <DataTemplate x:Key="LibraryTemplate">
-                <Grid Margin="0,0,0,2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="32"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="16"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-
-                    <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/PBDotNet;component/Images/Library.png"></Image>
-                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding File}" Margin="2,0,0,0" FontWeight="Bold"></TextBlock>
-                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Dir}" Margin="2,0,0,0"></TextBlock>
-                </Grid>
-            </DataTemplate>
-
-            <HierarchicalDataTemplate x:Key="TargetTemplate" ItemsSource="{Binding Libraries}" ItemTemplate="{StaticResource LibraryTemplate}">
-                <Grid Margin="0,0,0,2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="32"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="16"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                    </Grid.RowDefinitions>
-
-                    <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/PBDotNet;component/Images/Target.png"></Image>
-                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding File}" Margin="2,0,0,0" FontWeight="Bold"></TextBlock>
-                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Dir}" Margin="2,0,0,0"></TextBlock>
-                </Grid>
-            </HierarchicalDataTemplate>
-
-            <HierarchicalDataTemplate x:Key="DatawindowObjectTemplate" ItemsSource="{Binding Childs}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
-            </HierarchicalDataTemplate>
-        </Grid.Resources>
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" x:Name="gridWorkspace"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
         
         <Grid.RowDefinitions>
             <RowDefinition Height="24"></RowDefinition>
@@ -57,150 +57,265 @@
             <RowDefinition Height="28"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+        <Menu Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Open Workspace" x:Name="menuOpenWorkspace" Click="menuOpenWorkspace_Click"></MenuItem>
                 <MenuItem Header="Open Library" x:Name="menuOpenLibrary" Click="menuOpenLibrary_Click"></MenuItem>
+                <MenuItem Header="Open Folder" x:Name="menuOpenFolder" Click="menuOpenFolder_Click"></MenuItem>
             </MenuItem>
-        </Menu>       
+        </Menu>
 
+        <xcad:DockingManager 
+            Grid.Row="1"             
+            AllowMixedOrientation="True"
+            BorderBrush="Black"
+            BorderThickness="0"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch">
+            
+            <xcad:DockingManager.DocumentHeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconSource}" Margin="0,0,4,0"/>
+                        <TextBlock Text="{Binding Title}" />
+                    </StackPanel>
+                </DataTemplate>
+            </xcad:DockingManager.DocumentHeaderTemplate>
 
-        <TreeView Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6,6,6,6" x:Name="listWorkspace" ItemsSource="{Binding}" ItemTemplate="{StaticResource TargetTemplate}" SelectedItemChanged="listWorkspace_SelectedItemChanged" >
-        </TreeView>
-        <TabControl Grid.Column="1" Grid.Row="1"
+            <xcad:LayoutRoot x:Name="_layoutRoot">
+                <xcad:LayoutPanel Orientation="Horizontal">                  
+                    
+                    <!-- Documents View -->
+                    <xcad:LayoutDocumentPaneGroup >
+                        <xcad:LayoutDocumentPane>
+                            <xcad:LayoutDocument ContentId="document1" Title="Document 1">
+                                
+                                <!-- OLD -->
+
+                                <Grid>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="300" x:Name="gridWorkspace"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="24"></RowDefinition>
+                                        <RowDefinition Height="*"></RowDefinition>
+                                        <RowDefinition Height="28"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    
+                                    <TreeView Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6,6,6,6" x:Name="listWorkspace" ItemsSource="{Binding}" ItemTemplate="{StaticResource TargetTemplate}" SelectedItemChanged="listWorkspace_SelectedItemChanged" >
+                                </TreeView>
+                                <TabControl Grid.Column="1" Grid.Row="1"
             HorizontalAlignment="Stretch" Margin="6,6,6,6" Name="tabControl1" VerticalAlignment="Stretch">
-            <TabItem Header="Items" Name="tabItem1">
-                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="200" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <ListBox Grid.Row="0" Name="lsObjects" SelectionChanged="lsObjects_SelectionChanged">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock HorizontalAlignment="Stretch" Text="{Binding Name}"></TextBlock>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <TabControl Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,6,0,0" VerticalAlignment="Stretch">
-                        <TabItem Header="Source">
-                            <avalonEdit:TextEditor
+                                    <TabItem Header="Items" Name="tabItem1">
+                                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="200" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <ListBox Grid.Row="0" Name="lsObjects" SelectionChanged="lsObjects_SelectionChanged">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock HorizontalAlignment="Stretch" Text="{Binding Name}"></TextBlock>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                            <TabControl Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,6,0,0" VerticalAlignment="Stretch">
+                                                <TabItem Header="Source">
+                                                    <avalonEdit:TextEditor
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtSource"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="PB"
                                         FontSize="10pt"/>
-                        </TabItem>
-                        <TabItem Name="tabDatawindow" Header="Datawindow" Visibility="Collapsed">
-                            <Grid>
-                                
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="24"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                
-                                
-                                <TextBox Grid.Column="0" Grid.Row="0" Name="txtDwRelease"></TextBox>
-                                <TreeView Grid.Column="0" Grid.Row="1" x:Name="listDatawindowObjs" ItemsSource="{Binding}" ItemTemplate="{StaticResource DatawindowObjectTemplate}" SelectedItemChanged="listDatawindowObjs_SelectedItemChanged">
-                                </TreeView>
-                                
-                                <TextBox Grid.Column="1" Grid.Row="0" Name="txtDwValue"></TextBox>
-                                <DataGrid Grid.Column="1" Grid.Row="1" Name="dgProperties" AutoGenerateColumns="True">                                   
-                                </DataGrid>
-                            </Grid>
-                                                     
-                        </TabItem>
-                        <TabItem Name="tabUserobject" Header="Userobject">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                    <RowDefinition Height="*"></RowDefinition>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <DataGrid Name="gridUoTypes" Grid.Row="0" Grid.Column="0" SelectionChanged="gridUoTypes_SelectionChanged" AutoGenerateColumns="False">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
-                                        <DataGridTextColumn Header="Ancestor" Binding="{Binding Ancestor}" IsReadOnly="True"></DataGridTextColumn>
-                                        <DataGridCheckBoxColumn Header="Global"  Binding="{Binding Path=Global,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                                <DataGrid Name="gridUoProps" Grid.Row="1" Grid.Column="0"></DataGrid>
-                                <DataGrid Name="gridUoMethods" Grid.Row="2" Grid.Column="0" SelectionChanged="gridUoMethods_SelectionChanged" AutoGenerateColumns="False">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True"></DataGridTextColumn>
-                                        <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
-                                        <DataGridTextColumn Header="Modifier" Binding="{Binding Modifier}" IsReadOnly="True"></DataGridTextColumn>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                                <DataGrid Name="gridUoEvents" Grid.Row="3" Grid.Column="0" SelectionChanged="gridUoEvents_SelectionChanged" AutoGenerateColumns="False">
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
-                                        <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
-                                        <DataGridCheckBoxColumn Header="Extended"  Binding="{Binding Path=Extended,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
-                                    </DataGrid.Columns>
-                                </DataGrid>
-                                <TabControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
-                                    <TabItem Header="Source">
-                                        <avalonEdit:TextEditor
+                                                </TabItem>
+                                                <TabItem Name="tabDatawindow" Header="Datawindow" Visibility="Collapsed">
+                                                    <Grid>
+
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="24"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+
+
+                                                        <TextBox Grid.Column="0" Grid.Row="0" Name="txtDwRelease"></TextBox>
+                                                        <TreeView Grid.Column="0" Grid.Row="1" x:Name="listDatawindowObjs" ItemsSource="{Binding}" ItemTemplate="{StaticResource DatawindowObjectTemplate}" SelectedItemChanged="listDatawindowObjs_SelectedItemChanged">
+                                                        </TreeView>
+
+                                                        <TextBox Grid.Column="1" Grid.Row="0" Name="txtDwValue"></TextBox>
+                                                        <DataGrid Grid.Column="1" Grid.Row="1" Name="dgProperties" AutoGenerateColumns="True">
+                                                        </DataGrid>
+                                                    </Grid>
+
+                                                </TabItem>
+                                                <TabItem Name="tabUserobject" Header="Userobject">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <DataGrid Name="gridUoTypes" Grid.Row="0" Grid.Column="0" SelectionChanged="gridUoTypes_SelectionChanged" AutoGenerateColumns="False">
+                                                            <DataGrid.Columns>
+                                                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
+                                                                <DataGridTextColumn Header="Ancestor" Binding="{Binding Ancestor}" IsReadOnly="True"></DataGridTextColumn>
+                                                                <DataGridCheckBoxColumn Header="Global"  Binding="{Binding Path=Global,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
+                                                            </DataGrid.Columns>
+                                                        </DataGrid>
+                                                        <DataGrid Name="gridUoProps" Grid.Row="1" Grid.Column="0"></DataGrid>
+                                                        <DataGrid Name="gridUoMethods" Grid.Row="2" Grid.Column="0" SelectionChanged="gridUoMethods_SelectionChanged" AutoGenerateColumns="False">
+                                                            <DataGrid.Columns>
+                                                                <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True"></DataGridTextColumn>
+                                                                <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
+                                                                <DataGridTextColumn Header="Modifier" Binding="{Binding Modifier}" IsReadOnly="True"></DataGridTextColumn>
+                                                            </DataGrid.Columns>
+                                                        </DataGrid>
+                                                        <DataGrid Name="gridUoEvents" Grid.Row="3" Grid.Column="0" SelectionChanged="gridUoEvents_SelectionChanged" AutoGenerateColumns="False">
+                                                            <DataGrid.Columns>
+                                                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
+                                                                <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
+                                                                <DataGridCheckBoxColumn Header="Extended"  Binding="{Binding Path=Extended,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
+                                                            </DataGrid.Columns>
+                                                        </DataGrid>
+                                                        <TabControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
+                                                            <TabItem Header="Source">
+                                                                <avalonEdit:TextEditor
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtUoSource"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="C#"
-                                        FontSize="10pt"/> 
-                                    </TabItem>
-                                    <TabItem Header="Instance Variables">
-                                        <avalonEdit:TextEditor
+                                        FontSize="10pt"/>
+                                                            </TabItem>
+                                                            <TabItem Header="Instance Variables">
+                                                                <avalonEdit:TextEditor
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtUoIVariables"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="PB"
                                         FontSize="10pt"/>
-                                    </TabItem>
-                                    <TabItem Header="Shared Variables">
-                                        <avalonEdit:TextEditor
+                                                            </TabItem>
+                                                            <TabItem Header="Shared Variables">
+                                                                <avalonEdit:TextEditor
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtUoSVariables"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="PB"
                                         FontSize="10pt"/>
-                                    </TabItem>
-                                    <TabItem Header="Global Variables">
-                                        <avalonEdit:TextEditor
+                                                            </TabItem>
+                                                            <TabItem Header="Global Variables">
+                                                                <avalonEdit:TextEditor
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtUoGVariables"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="PB"
                                         FontSize="10pt"/>
-                                    </TabItem>
-                                    <TabItem Header="External Functions">
-                                        <avalonEdit:TextEditor
+                                                            </TabItem>
+                                                            <TabItem Header="External Functions">
+                                                                <avalonEdit:TextEditor
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtUoExtFunctions"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="PB"
                                         FontSize="10pt"/>
+                                                            </TabItem>
+                                                        </TabControl>
+
+                                                    </Grid>
+
+                                                </TabItem>
+                                            </TabControl>
+
+                                        </Grid>
                                     </TabItem>
+
                                 </TabControl>
-                               
-                            </Grid>
-                            
-                        </TabItem>
-                    </TabControl>
+                                </Grid>
+                            </xcad:LayoutDocument>
+                            <xcad:LayoutDocument ContentId="document2" Title="Document 2">
+                                <TextBox Text="Document 2 Content" AcceptsReturn="True"/>
+                            </xcad:LayoutDocument>
+                        </xcad:LayoutDocumentPane>
+                    </xcad:LayoutDocumentPaneGroup >
                     
-                </Grid>
-            </TabItem>
-            
-        </TabControl>
+                    <!-- List View -->
+                    <xcad:LayoutAnchorablePaneGroup DockWidth="125">
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable ContentId="alarms" Title="Alarms">
+                                <ListBox>
+                                    <s:String>Alarm 1</s:String>
+                                    <s:String>Alarm 2</s:String>
+                                    <s:String>Alarm 3</s:String>
+                                </ListBox>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable ContentId="journal" Title="Journal" >
+                                <RichTextBox>
+                                    <FlowDocument>
+                                        <Paragraph FontSize="14" FontFamily="Segoe">
+                                            This is the content of the Journal Pane.
+                                            <LineBreak/>
+                                            A
+                                            <Bold>RichTextBox</Bold> has been added here
+                                        </Paragraph>
+                                    </FlowDocument>
+                                </RichTextBox>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorablePane>
+                    </xcad:LayoutAnchorablePaneGroup>
+
+                    <!-- Property View -->
+                    <xcad:LayoutAnchorablePane DockWidth="200">
+                        <xcad:LayoutAnchorable 
+                            ContentId="properties" 
+                            Title="Properties" 
+                            CanHide="False" 
+                            CanClose="False"
+                            AutoHideWidth="240">
+
+                            <xctk:PropertyGrid NameColumnWidth="110" SelectedObject="{Binding ElementName=_layoutRoot, Path=LastFocusedDocument.Content}" AutoGenerateProperties="False">
+                                <xctk:PropertyGrid.PropertyDefinitions>
+                                    <xctk:PropertyDefinition TargetProperties="Background" />
+                                    <xctk:PropertyDefinition TargetProperties="BorderBrush" />
+                                    <xctk:PropertyDefinition TargetProperties="BorderThickness" />
+                                    <xctk:PropertyDefinition TargetProperties="FontSize" />
+                                    <xctk:PropertyDefinition TargetProperties="FontStyle" />
+                                    <xctk:PropertyDefinition TargetProperties="Width" />
+                                    <xctk:PropertyDefinition TargetProperties="Height" />
+                                </xctk:PropertyGrid.PropertyDefinitions>
+                            </xctk:PropertyGrid>
+
+                        </xcad:LayoutAnchorable>
+                    </xcad:LayoutAnchorablePane>
+                </xcad:LayoutPanel>
+
+                <!-- Hidden View -->
+                <xcad:LayoutRoot.LeftSide>
+                    <xcad:LayoutAnchorSide>
+                        <xcad:LayoutAnchorGroup>
+                            <xcad:LayoutAnchorable Title="Agenda" ContentId="agenda">
+                                <TextBlock Text="Agenda Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
+                            </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Contacts" ContentId="contacts">
+                                <TextBlock Text="Contacts Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
+                            </xcad:LayoutAnchorable>
+                        </xcad:LayoutAnchorGroup>
+                    </xcad:LayoutAnchorSide>
+                </xcad:LayoutRoot.LeftSide>
+            </xcad:LayoutRoot>
+
+        </xcad:DockingManager>
+
         <StatusBar Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" x:Name="stWorkspace" />
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2,2,2,2" x:Name="stVersion" />

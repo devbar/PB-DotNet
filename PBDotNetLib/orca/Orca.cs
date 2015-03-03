@@ -162,7 +162,7 @@ namespace PBDotNetLib.orca
             PBORCA_DIRENTRY myDirEntry = (PBORCA_DIRENTRY)Marshal.PtrToStructure(pDirEntry,typeof(PBORCA_DIRENTRY));
             DateTime myDateTime = new DateTime(1970, 01, 01, 00, 00, 00).AddSeconds((double) myDirEntry.lCreateTime);
 
-            libEntries.Add(new LibEntry(myDirEntry.lpszEntryName, GetObjecttype(myDirEntry.otEntryType), myDateTime, myDirEntry.lEntrySize, currentLibrary, myDirEntry.szComments));
+            libEntries.Add(new LibEntry(myDirEntry.lpszEntryName, GetObjecttype(myDirEntry.otEntryType), myDateTime, myDirEntry.lEntrySize, currentLibrary, this.currentVersion, myDirEntry.szComments));
         }
         #endregion
 
@@ -179,50 +179,50 @@ namespace PBDotNetLib.orca
         }
 
         /// <summary>
-        /// converts the LibEntry.Objecttype to PBORCA_ENTRY_TYPE
+        /// converts the Objecttype to PBORCA_ENTRY_TYPE
         /// </summary>
-        /// <param name="type">LibEntry.Objecttype</param>
+        /// <param name="type">Objecttype</param>
         /// <returns></returns>
-        private PBORCA_ENTRY_TYPE GetEntryType(LibEntry.Objecttype type)
+        private PBORCA_ENTRY_TYPE GetEntryType(Objecttype type)
         {
             PBORCA_ENTRY_TYPE entryType = PBORCA_ENTRY_TYPE.PBORCA_BINARY;
 
             switch (type)
             {
-                case LibEntry.Objecttype.Application:
+                case Objecttype.Application:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_APPLICATION;
                     break;
-                case LibEntry.Objecttype.Binary:
+                case Objecttype.Binary:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_BINARY;
                     break;
-                case LibEntry.Objecttype.Datawindow:
+                case Objecttype.Datawindow:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_DATAWINDOW;
                     break;
-                case LibEntry.Objecttype.Function:
+                case Objecttype.Function:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_FUNCTION;
                     break;
-                case LibEntry.Objecttype.Menu:
+                case Objecttype.Menu:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_MENU;
                     break;
-                case LibEntry.Objecttype.Pipeline:
+                case Objecttype.Pipeline:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_PIPELINE;
                     break;
-                case LibEntry.Objecttype.Project:
+                case Objecttype.Project:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_PROJECT;
                     break;
-                case LibEntry.Objecttype.Proxyobject:
+                case Objecttype.Proxyobject:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_PROXYOBJECT;
                     break;
-                case LibEntry.Objecttype.Query:
+                case Objecttype.Query:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_QUERY;
                     break;
-                case LibEntry.Objecttype.Structure:
+                case Objecttype.Structure:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_STRUCTURE;
                     break;
-                case LibEntry.Objecttype.Userobject:
+                case Objecttype.Userobject:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_USEROBJECT;
                     break;
-                case LibEntry.Objecttype.Window:
+                case Objecttype.Window:
                     entryType = PBORCA_ENTRY_TYPE.PBORCA_WINDOW;
                     break;
             }
@@ -231,51 +231,51 @@ namespace PBDotNetLib.orca
         }
 
         /// <summary>
-        /// converts the PBORCA_ENTRY_TYPE to LibEntry.Objecttype
+        /// converts the PBORCA_ENTRY_TYPE to Objecttype
         /// </summary>
         /// <param name="entryType"></param>
         /// <returns></returns>
-        private LibEntry.Objecttype GetObjecttype(PBORCA_ENTRY_TYPE entryType)
+        private Objecttype GetObjecttype(PBORCA_ENTRY_TYPE entryType)
         {
-            LibEntry.Objecttype type = LibEntry.Objecttype.None;
+            Objecttype type = Objecttype.None;
 
             switch (entryType)
             {
                 case PBORCA_ENTRY_TYPE.PBORCA_APPLICATION:
-                    type = LibEntry.Objecttype.Application;
+                    type = Objecttype.Application;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_BINARY:
-                    type = LibEntry.Objecttype.Binary;
+                    type = Objecttype.Binary;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_DATAWINDOW:
-                    type = LibEntry.Objecttype.Datawindow;
+                    type = Objecttype.Datawindow;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_FUNCTION:
-                    type = LibEntry.Objecttype.Function;
+                    type = Objecttype.Function;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_MENU:
-                    type = LibEntry.Objecttype.Menu;
+                    type = Objecttype.Menu;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_PIPELINE:
-                    type = LibEntry.Objecttype.Pipeline;
+                    type = Objecttype.Pipeline;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_PROJECT:
-                    type = LibEntry.Objecttype.Project;
+                    type = Objecttype.Project;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_PROXYOBJECT:
-                    type = LibEntry.Objecttype.Proxyobject;
+                    type = Objecttype.Proxyobject;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_QUERY:
-                    type = LibEntry.Objecttype.Query;
+                    type = Objecttype.Query;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_STRUCTURE:
-                    type = LibEntry.Objecttype.Structure;
+                    type = Objecttype.Structure;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_USEROBJECT:
-                    type = LibEntry.Objecttype.Userobject;
+                    type = Objecttype.Userobject;
                     break;
                 case PBORCA_ENTRY_TYPE.PBORCA_WINDOW:
-                    type = LibEntry.Objecttype.Window;
+                    type = Objecttype.Window;
                     break;
             }
 

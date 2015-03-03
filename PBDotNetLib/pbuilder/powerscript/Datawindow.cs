@@ -40,8 +40,12 @@ namespace PBDotNetLib.pbuilder.powerscript
         {
             Datawindow datawindow = new Datawindow();
 
-            datawindow.Release = GetRelease(ref source);
-            datawindow.Object = Parse(ref source);
+            try {
+                datawindow.Release = GetRelease(ref source);
+                datawindow.Object = Parse(ref source);
+            } catch (Exception exp) {                
+                //MessageBox.Show("Error parsing DW");
+            }
 
             return datawindow;
         }

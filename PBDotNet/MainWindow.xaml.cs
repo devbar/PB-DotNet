@@ -89,7 +89,7 @@ namespace PBDotNet
         private void menuOpenLibrary_Click(object sender, RoutedEventArgs e) {
             OpenFileDialog dialog = new OpenFileDialog();
 
-            dialog.Filter = "Powerbuilder Librar (*.pbl)|*.pbl";
+            dialog.Filter = "Powerbuilder Library (*.pbl)|*.pbl";
 
             if (!dialog.ShowDialog().Value)
                 return;
@@ -98,8 +98,13 @@ namespace PBDotNet
         }
 
         private void openLibrary(string libraryPath) {
-            Library lib = new Library(libraryPath, this.pbVersion);
-            lsObjects.ItemsSource = new Orca(this.pbVersion).DirLibrary(lib.Dir + "\\" + lib.File);
+            ILibrary lib = null;
+            if (libraryPath.EndsWith(".pbl"))
+                lib = new Library(libraryPath, this.pbVersion);
+            else
+                lib = new VirtualLibrary(libraryPath);
+
+            lsObjects.ItemsSource = lib.EntryList;
 
             listWorkspace.DataContext = null;
             listWorkspace.Visibility = System.Windows.Visibility.Collapsed;
@@ -128,48 +133,49 @@ namespace PBDotNet
 
         private void lsObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            PBDotNetLib.orca.LibEntry lib;
+            PBDotNetLib.orca.ILibEntry lib;
             Powerscript.Type[] types;
             Powerscript.Datawindow dw;
 
-            lib = (PBDotNetLib.orca.LibEntry)lsObjects.SelectedItem;
+            lib = (PBDotNetLib.orca.ILibEntry)lsObjects.SelectedItem;
             if (lib != null)
             {
-                new Orca(this.pbVersion).FillCode(lib);                
-
                 txtSource.TextArea.Document.Text = lib.Source ?? "";
                 
                 switch (lib.Type)
                 {
-                    case LibEntry.Objecttype.Datawindow:                        
+                    case Objecttype.Datawindow:                        
                         tabUserobject.Visibility = System.Windows.Visibility.Collapsed;
                         tabDatawindow.Visibility = System.Windows.Visibility.Visible;
 
                         dw = Powerscript.Datawindow.GetDatawindowFromSource(lib.Source);
                         txtDwRelease.Text = dw.Release;
-                        listDatawindowObjs.ItemsSource = dw.Object.Childs;
+
+                        if (dw.Object != null) {
+                            listDatawindowObjs.ItemsSource = dw.Object.Childs;
+                        }
 
                         break;
-                    case LibEntry.Objecttype.Structure:
+                    case Objecttype.Structure:
                         tabUserobject.Header = "Structure";
-                        goto case LibEntry.Objecttype.Window;
-                    case LibEntry.Objecttype.Menu:
+                        goto case Objecttype.Window;
+                    case Objecttype.Menu:
                         tabUserobject.Header = "Menu";
-                        goto case LibEntry.Objecttype.Window;
-                    case LibEntry.Objecttype.Function:
+                        goto case Objecttype.Window;
+                    case Objecttype.Function:
                         tabUserobject.Header = "Function";
-                        goto case LibEntry.Objecttype.Window;
-                    case LibEntry.Objecttype.Application:
+                        goto case Objecttype.Window;
+                    case Objecttype.Application:
                         tabUserobject.Header = "Application";
-                        goto case LibEntry.Objecttype.Window;
-                    case LibEntry.Objecttype.Userobject:
+                        goto case Objecttype.Window;
+                    case Objecttype.Userobject:
                         tabUserobject.Header = "UserObject";
-                        goto case LibEntry.Objecttype.Window;
-                    case LibEntry.Objecttype.Window:
+                        goto case Objecttype.Window;
+                    case Objecttype.Window:
                         tabUserobject.Visibility = System.Windows.Visibility.Visible;
                         tabDatawindow.Visibility = System.Windows.Visibility.Collapsed;
 
-                        if(lib.Type == LibEntry.Objecttype.Window)
+                        if(lib.Type == Objecttype.Window)
                             tabUserobject.Header = "Window";
 
                         types = Powerscript.Type.GetTypesFromSource(lib.Source);
@@ -239,6 +245,14 @@ namespace PBDotNet
                 Powerscript.Datawindow.Element element = (Powerscript.Datawindow.Element)e.NewValue;
                 txtDwValue.Text = element.Value;
                 dgProperties.ItemsSource = element.Attributes;
+            }
+        }
+
+        private void menuOpenFolder_Click(object sender, RoutedEventArgs e) {
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK){
+                this.openLibrary(dialog.SelectedPath);
             }
         }
     }

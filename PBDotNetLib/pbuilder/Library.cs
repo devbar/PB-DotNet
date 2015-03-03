@@ -11,7 +11,7 @@ namespace PBDotNetLib.pbuilder
     /// <summary>
     /// pb library
     /// </summary>
-    public class Library : PBSrcFile
+    public class Library : PBSrcFile, ILibrary
     {
         #region private
 
@@ -54,7 +54,7 @@ namespace PBDotNetLib.pbuilder
             this.file = file.Substring(file.LastIndexOf("\\") + 1);
         }
 
-        public LibEntry[] EntryList
+        public ILibEntry[] EntryList
         {
             get
             {
