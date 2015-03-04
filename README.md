@@ -15,4 +15,4 @@ TODO
 * Append funcions and events to object list (?)
 
 
-![ScreenShot](https://raw.github.com/devbar/PB-DotNet/master/screenshot.png)
+![ScreenShot](http://www.devbar.de/wp-content/uploads/2015/03/PBDotNet.png)
