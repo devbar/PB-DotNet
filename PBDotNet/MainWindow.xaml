@@ -133,14 +133,7 @@
                         <xcad:LayoutDocumentPane>
                             <xcad:LayoutDocument ContentId="document1" Title="Document 1">
                                 <TabControl Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" Margin="0,6,0,0" VerticalAlignment="Stretch">
-                                    <TabItem Header="Source">
-                                        <avalonEdit:TextEditor
-                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                                        Name="txtSource"
-                                        FontFamily="Consolas"
-                                        SyntaxHighlighting="PB"
-                                        FontSize="10pt"/>
-                                    </TabItem>
+                                    
                                     <TabItem Name="tabDatawindow" Header="Datawindow" Visibility="Collapsed">
                                         <Grid>
 
@@ -165,17 +158,18 @@
                                         </Grid>
 
                                     </TabItem>
-                                    <TabItem Name="tabUserobject" Header="Userobject">
+                                    <TabItem Name="tabUserobject" Header="Events">
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>                                                
-                                                <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="1*"></RowDefinition>
+                                                <RowDefinition Height="2*"></RowDefinition>                                                                                                
                                             </Grid.RowDefinitions>
+                                            
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
+                                            
                                             <DataGrid Name="gridUoTypes" Grid.Row="0" Grid.Column="0" SelectionChanged="gridUoTypes_SelectionChanged" AutoGenerateColumns="False">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
@@ -183,33 +177,51 @@
                                                     <DataGridCheckBoxColumn Header="Global"  Binding="{Binding Path=Global,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
                                                 </DataGrid.Columns>
                                             </DataGrid>                                            
-                                            <DataGrid Name="gridUoMethods" Grid.Row="1" Grid.Column="0" SelectionChanged="gridUoMethods_SelectionChanged" AutoGenerateColumns="False">
-                                                <DataGrid.Columns>
-                                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True"></DataGridTextColumn>
-                                                    <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
-                                                    <DataGridTextColumn Header="Modifier" Binding="{Binding Modifier}" IsReadOnly="True"></DataGridTextColumn>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                            <DataGrid Name="gridUoEvents" Grid.Row="2" Grid.Column="0" SelectionChanged="gridUoEvents_SelectionChanged" AutoGenerateColumns="False">
+                                            
+                                            <DataGrid Name="gridUoEvents" Grid.Row="0" Grid.Column="1" SelectionChanged="gridUoEvents_SelectionChanged" AutoGenerateColumns="False">
                                                 <DataGrid.Columns>
                                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True"></DataGridTextColumn>
                                                     <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
                                                     <DataGridCheckBoxColumn Header="Extended"  Binding="{Binding Path=Extended,Mode=OneWay}" IsReadOnly="True"></DataGridCheckBoxColumn>
                                                 </DataGrid.Columns>
                                             </DataGrid>
-                                            <TabControl Grid.Row="0" Grid.RowSpan="4" Grid.Column="1">
-                                                <TabItem Header="Source">
-                                                    <avalonEdit:TextEditor
+                                            
+                                                <avalonEdit:TextEditor Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="txtUoSource"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="C#"
                                         FontSize="10pt"/>
-                                                </TabItem>
-                                            </TabControl>
+                                            
+                                            
 
                                         </Grid>
 
+                                    </TabItem>
+
+                                    <TabItem Name="tabMethods" Header="Functions">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="1*"></RowDefinition>
+                                                <RowDefinition Height="2*"></RowDefinition>
+                                            </Grid.RowDefinitions>
+                                            
+                                            <DataGrid Name="gridUoMethods" Grid.Row="0" Grid.Column="0" SelectionChanged="gridUoMethods_SelectionChanged" AutoGenerateColumns="False">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"  IsReadOnly="True"></DataGridTextColumn>
+                                                    <DataGridTextColumn Header="Returntype" Binding="{Binding Returntype}" IsReadOnly="True"></DataGridTextColumn>
+                                                    <DataGridTextColumn Header="Modifier" Binding="{Binding Modifier}" IsReadOnly="True"></DataGridTextColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+
+                                            <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtMethodSource"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="C#"
+                                        FontSize="10pt"
+                                                Grid.Row="1"/>
+                                        </Grid>
                                     </TabItem>
 
                                     <TabItem Header="Instance Variables">
@@ -244,6 +256,15 @@
                                         SyntaxHighlighting="PB"
                                         FontSize="10pt"/>
                                     </TabItem>
+
+                                    <TabItem Header="Source">
+                                        <avalonEdit:TextEditor
+                                        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="txtSource"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="PB"
+                                        FontSize="10pt"/>
+                                    </TabItem>
                                 </TabControl>
                             </xcad:LayoutDocument>
                             <xcad:LayoutDocument ContentId="document2" Title="Document 2">
@@ -260,18 +281,6 @@
                                 <xcad:LayoutAnchorable ContentId="alarms" Title="Items">
                                     <TreeView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="6,6,6,6" x:Name="listPowerObjects" ItemsSource="{Binding}" ItemTemplate="{StaticResource PowerObjectTemplate}" SelectedItemChanged="listPowerObjects_SelectedItemChanged" >
                                     </TreeView>
-                                </xcad:LayoutAnchorable>
-                                <xcad:LayoutAnchorable ContentId="journal" Title="Journal" >
-                                    <RichTextBox>
-                                        <FlowDocument>
-                                            <Paragraph FontSize="14" FontFamily="Segoe">
-                                                This is the content of the Journal Pane.
-                                                <LineBreak/>
-                                                A
-                                                <Bold>RichTextBox</Bold> has been added here
-                                            </Paragraph>
-                                        </FlowDocument>
-                                    </RichTextBox>
                                 </xcad:LayoutAnchorable>
                             </xcad:LayoutAnchorablePane>
                         </xcad:LayoutAnchorablePaneGroup>
@@ -301,13 +310,7 @@
                 <!-- Hidden View -->
                 <xcad:LayoutRoot.LeftSide>
                     <xcad:LayoutAnchorSide>
-                        <xcad:LayoutAnchorGroup>
-                            <xcad:LayoutAnchorable Title="Agenda" ContentId="agenda">
-                                <TextBlock Text="Agenda Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Contacts" ContentId="contacts">
-                                <TextBlock Text="Contacts Content" Margin="10" FontSize="18" FontWeight="Black" TextWrapping="Wrap"/>
-                            </xcad:LayoutAnchorable>
+                        <xcad:LayoutAnchorGroup>                            
                         </xcad:LayoutAnchorGroup>
                     </xcad:LayoutAnchorSide>
                 </xcad:LayoutRoot.LeftSide>

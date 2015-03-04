@@ -265,7 +265,7 @@ namespace PBDotNet
             if (gridUoMethods.SelectedIndex < 0)
                 return;
 
-            txtUoSource.TextArea.Document.Text = ((Powerscript.Method[])gridUoMethods.ItemsSource)[gridUoMethods.SelectedIndex].Source;
+            txtMethodSource.TextArea.Document.Text = ((Powerscript.Method[])gridUoMethods.ItemsSource)[gridUoMethods.SelectedIndex].Source;
         }
 
         private void listWorkspace_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
