@@ -22,6 +22,8 @@ using System.IO;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ICSharpCode.AvalonEdit.Highlighting;
+using System.ComponentModel;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace PBDotNet
 {
@@ -104,11 +106,12 @@ namespace PBDotNet
             else
                 lib = new VirtualLibrary(libraryPath);
 
-            lsObjects.ItemsSource = lib.EntryList;
+            listPowerObjects.ItemsSource = lib.EntryList;
 
             listWorkspace.DataContext = null;
             listWorkspace.Visibility = System.Windows.Visibility.Collapsed;
-            gridWorkspace.Width = new GridLength(0);
+            // TODO: Workspace ist jetzt ein Dock
+            //gridWorkspace.Width = new GridLength(0);
         }
 
         private void openWorkspace(string workspacePath) {
@@ -119,7 +122,8 @@ namespace PBDotNet
 
             listWorkspace.DataContext = workspace.Targets;
             listWorkspace.Visibility = System.Windows.Visibility.Visible;
-            gridWorkspace.Width = new GridLength(300);
+            // TODO: Workspace ist jetzt ein Dock
+            //gridWorkspace.Width = new GridLength(300);
         }
 
         private void listWorkspace_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -127,19 +131,35 @@ namespace PBDotNet
             if (e.NewValue is Library)
             {
                 Library lib = (Library)e.NewValue;
-                lsObjects.ItemsSource = new Orca(this.pbVersion).DirLibrary(lib.Dir + "\\" + lib.File);
+                List<LibEntry> libs = new Orca(this.pbVersion).DirLibrary(lib.Dir + "\\" + lib.File);
+                List<LibEntryView> libsViews = new List<LibEntryView>();
+
+                foreach(LibEntry l in libs) libsViews.Add(new LibEntryView(l));
+
+                listPowerObjects.ItemsSource = libsViews;
             }
         }
 
-        private void lsObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void listPowerObjects_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             PBDotNetLib.orca.ILibEntry lib;
+            LibEntryView libView = null;
+            TypeView typeView = null;
             Powerscript.Type[] types;
             Powerscript.Datawindow dw;
 
-            lib = (PBDotNetLib.orca.ILibEntry)lsObjects.SelectedItem;
-            if (lib != null)
+            if (e.NewValue is LibEntryView) {
+                libView = (LibEntryView)e.NewValue;
+                typeView = libView.Type;
+            } else if (e.NewValue is TypeView) {
+                typeView = (TypeView)e.NewValue;
+                libView = (typeView).Parent;
+            }
+            
+            if (libView != null)
             {
+                lib = libView.LibEntry;
+
                 txtSource.TextArea.Document.Text = lib.Source ?? "";
                 
                 switch (lib.Type)
@@ -185,7 +205,22 @@ namespace PBDotNet
                             return;
                         }
 
-                        gridUoTypes.ItemsSource = types;
+                        gridUoTypes.ItemsSource = types;                        
+
+                        if (libView.Types == null) {
+                            List<TypeView> typeViews = new List<TypeView>();
+                            foreach (Powerscript.Type t in types) {
+                                if (t.Name == libView.Name){
+                                    libView.Type = new TypeView(t, libView);
+                                    typeView = libView.Type;
+                                }else{
+                                    typeViews.Add(new TypeView(t, libView));
+                                }
+                            }
+                            libView.Types = typeViews;
+                        }
+
+                        gridUoProps.ItemsSource = typeView.Type.Properties;
 
                         if (types.Length > 0)
                         {
@@ -254,6 +289,72 @@ namespace PBDotNet
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK){
                 this.openLibrary(dialog.SelectedPath);
             }
+        }
+
+        private class TypeView {
+            public LibEntryView parent;
+            private Powerscript.Type type;
+
+            public Powerscript.Type Type {
+                get {
+                    return this.type;
+                }
+            }
+
+            public LibEntryView Parent {
+                get {
+                    return this.parent;
+                }
+            }
+
+            public string Name {
+                get {
+                    return this.type.Name;
+                }
+            }
+
+            public TypeView(Powerscript.Type type, LibEntryView parent) {
+                this.type = type;
+                this.parent = parent;
+            }            
+        }
+
+        
+        private class LibEntryView : INotifyPropertyChanged {
+            private ILibEntry libEntry;
+            private IEnumerable<TypeView> types;
+            public TypeView Type { get; set; }
+
+            public LibEntryView(ILibEntry libEntry) {
+                this.libEntry = libEntry;
+            }
+
+            public ILibEntry LibEntry {
+                get {
+                    return this.libEntry;
+                }
+            }
+
+            public string Name {
+                get {
+                    return this.libEntry.Name;
+                }
+            }
+
+            public IEnumerable<TypeView> Types {
+                get {
+                    return this.types;
+                }
+                set{
+                    this.types = value;
+                    
+                    if (this.PropertyChanged != null) {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("Types"));
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
         }
     }
 }
