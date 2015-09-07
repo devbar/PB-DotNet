@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.AvalonDock", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.Toolkit", "..\..\CodePlex\WpfToolkit\Main\Source\ExtendedWPFToolkitSolution\Src\Xceed.Wpf.Toolkit\Xceed.Wpf.Toolkit.csproj", "{72E591D6-8F83-4D8C-8F67-9C325E623234}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PBGenerator", "PBGenerator\PBGenerator.csproj", "{193EAABA-1552-4937-BE5E-3C330E3E0544}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,16 @@ Global
 		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{72E591D6-8F83-4D8C-8F67-9C325E623234}.Release|x86.ActiveCfg = Release|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{193EAABA-1552-4937-BE5E-3C330E3E0544}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -76,6 +76,13 @@ namespace PBDotNetLib.orca
             IntPtr pUserData
         );
 
+        [DllImport("pborc125.dll", EntryPoint = "PBORCA_DynamicLibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int PBORCA_DynamicLibraryCreate125(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszPbrName,
+            IntPtr lFlags);
+
         #endregion PB12.5
 
         #region PB12.6
@@ -108,6 +115,13 @@ namespace PBDotNetLib.orca
             IntPtr pUserData
         );
 
+        [DllImport("pborc126.dll", EntryPoint = "PBORCA_DynamicLibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int PBORCA_DynamicLibraryCreate126(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszPbrName,
+            IntPtr lFlags);
+
         #endregion PB12.6
 
         #region PB11.5
@@ -139,6 +153,13 @@ namespace PBDotNetLib.orca
             PBORCA_LIBDIRCALLBACK pListProc,
             IntPtr pUserData
         );
+
+        [DllImport("pborc115.dll", EntryPoint = "PBORCA_DynamicLibraryCreate", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int PBORCA_DynamicLibraryCreate115(
+            int hORCASession,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszLibName,
+            [MarshalAs(UnmanagedType.LPTStr)] string lpszPbrName,
+            IntPtr lFlags);
 
         #endregion PB11.5
 
@@ -280,6 +301,53 @@ namespace PBDotNetLib.orca
             }
 
             return type;
+        }
+
+        public void CreateDynamicLibrary(string file, string pbrFile)
+        {
+            int orcaSession = 0;
+
+            if (orcaSession == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        orcaSession = PBORCA_SessionOpen115();
+                        break;
+                    case Version.PB125:
+                        orcaSession = PBORCA_SessionOpen125();
+                        break;
+                    case Version.PB126:
+                        orcaSession = PBORCA_SessionOpen126();
+                        break;
+                }
+            } else {
+                orcaSession = session;
+            }
+
+            switch (this.currentVersion) {
+                case Version.PB115:
+                    PBORCA_DynamicLibraryCreate115(orcaSession, file, pbrFile, IntPtr.Zero);
+                    break;
+                case Version.PB125:
+                    PBORCA_DynamicLibraryCreate125(orcaSession, file, pbrFile, IntPtr.Zero);
+                    break;
+                case Version.PB126:
+                    PBORCA_DynamicLibraryCreate126(orcaSession, file, pbrFile, IntPtr.Zero);
+                    break;
+            }
+
+            if (session == 0) {
+                switch (this.currentVersion) {
+                    case Version.PB115:
+                        PBORCA_SessionClose115(orcaSession);
+                        break;
+                    case Version.PB125:
+                        PBORCA_SessionClose125(orcaSession);
+                        break;
+                    case Version.PB126:
+                        PBORCA_SessionClose126(orcaSession);
+                        break;
+                }
+            }
         }
 
         /// <summary>

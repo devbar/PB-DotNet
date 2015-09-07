@@ -1,0 +1,30 @@
+﻿<Window x:Class="PBGenerator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28"></RowDefinition>
+            <RowDefinition Height="28"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="28"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="28"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        
+        <TextBox Grid.Column="0" x:Name="Path" />
+        <Button Grid.Row="0" Grid.Column="1" x:Name="Browse" Content="..." Height="28" Click="Browse_OnClick"/>
+        
+        <ComboBox x:Name="PbVersion" Grid.Row="1" Grid.Column="0">
+            <ComboBoxItem Name="Pb115">PB 11.5</ComboBoxItem>
+            <ComboBoxItem Name="Pb125">PB 12.5</ComboBoxItem>
+            <ComboBoxItem Name="Pb126">PB 12.6</ComboBoxItem>
+        </ComboBox>
+        
+        <Button Grid.Row="3" x:Name="Generate" Content="Generate" Grid.ColumnSpan="2" Grid.Column="0"
+                Click="Generate_OnClick"></Button>
+    </Grid>
+</Window>
